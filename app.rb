@@ -24,21 +24,29 @@ post '/build_ctags' do
 end
 
 get '/definition' do
+  repo_slug = params[:repo_slug]
   commit_hash = params[:commit]
   tag = params[:tag]
 
-  return 400 if commit_hash.nil? || tag.nil?
+  return 400 if repo_slug.nil? || commit_hash.nil? || tag.nil?
 
-  {
-    :found => true,
-    :results => [
+  ctagger = CTagger.new(repo_slug, commit_hash)
+  return 404 if !ctagger.tags_exist?
+
+  results = ctagger.lookup_tag(tag)
+
+  response = {
+    :found => results.size > 0,
+    :results => results.map do |result|
       {
-        :filename => '',
-        :url => '',
-        :line_number => ''
+        :filename => result.filename, 
+        :url => 'https://github.com/foo/bar',
+        :line_number => result.line_number
       }
-    ]
-  }.to_json
+    end
+  }
+
+  response.to_json
 end
 
 class CTagger
@@ -56,6 +64,11 @@ class CTagger
     download_commit
     build_ctags
     cleanup
+  end
+
+  def lookup_tag(tag)
+    reader = CtagsReader.read(tags_path)
+    reader.find_all(tag)
   end
 
   private
