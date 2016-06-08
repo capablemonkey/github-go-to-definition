@@ -7,22 +7,6 @@ get '/' do
   "Hello!"
 end
 
-post '/build_ctags' do
-  # ?repo_slug=grnhse/greenhouse_io&commit=aa96494a1674d5288148d2356fbec84ae5e46bdc
-
-  repo_slug = params[:repo_slug]
-  commit_hash = params[:commit]
-  return 400 if repo_slug.nil? || commit_hash.nil?
-
-  ctagger = CTagger.new(repo_slug, commit_hash)
-
-  return 200 if ctagger.tags_exist?
-
-  ctagger.generate_tags
-
-  200
-end
-
 get '/definition' do
   repo_slug = params[:repo_slug]
   commit_hash = params[:commit]
@@ -31,8 +15,7 @@ get '/definition' do
   return 400 if repo_slug.nil? || commit_hash.nil? || tag.nil?
 
   ctagger = CTagger.new(repo_slug, commit_hash)
-  return 404 if !ctagger.tags_exist?
-
+  ctagger.generate_tags if !ctagger.tags_exist?
   results = ctagger.lookup_tag(tag)
 
   response = {
