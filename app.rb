@@ -7,24 +7,21 @@ get '/' do
 end
 
 post '/build_ctags' do
-  # ?repo_slug=grnhse/greenhouse_io&branch=master
+  # ?repo_slug=grnhse/greenhouse_io&branch=master&commit=aa96494a1674d5288148d2356fbec84ae5e46bdc
 
   repo_slug = params[:repo_slug]
   branch = params[:branch]
   return 400 if repo_slug.nil? || branch.nil?
 
   # TODO: validate repo_url with regex
-  download_branch(repo_slug, branch)
+  branch_path = download_branch(repo_slug, branch)
+  build_ctags(branch_path)
 
   200
 end
 
 get '/definition?tag=&file=' do
 
-end
-
-def repo_signature(repo_url)
-  Digest::SHA256.hexdigest 'repo_url'
 end
 
 def branch_signature(repo_slug, branch)
@@ -43,6 +40,10 @@ def unzip_file(zip_path, destination_path)
   `unzip #{zip_path} -d #{destination_path}`
 end
 
+def move_up_one_directory(directory)
+  `mv #{directory}/*/* #{directory}/`
+end
+
 def download_branch(repo_slug, branch)
   url = path_to_zip(repo_slug, branch)
   signature = branch_signature(repo_slug, branch)
@@ -51,4 +52,15 @@ def download_branch(repo_slug, branch)
 
   unpack_path = "./repos/#{signature}"
   unzip_file(destination_zip, unpack_path)
+  move_up_one_directory(unpack_path)
+
+  unpack_path
+end
+
+def repo_path(repo_slug, branch)
+  "./repos/#{branch_signature(repo_slug, branch)}"
+end
+
+def build_ctags(directory)
+  `ctags -R #{directory}`
 end
