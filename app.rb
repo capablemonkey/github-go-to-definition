@@ -1,9 +1,7 @@
 require 'sinatra'
-require 'digest/sha2'
 require 'open-uri'
 require 'ctags_reader'
-
-# TODO: Just store ctags as {commit_hash}.tags.  clean up zip and files.  future API calls just require the last commit hash.
+require 'json'
 
 get '/' do
   "Hello!"
@@ -26,7 +24,12 @@ post '/build_ctags' do
   200
 end
 
-get '/definition?tag=&commit=' do
+get '/definition' do
+  commit_hash = params[:commit]
+  tag = params[:tag]
+
+  return 400 if commit_hash.nil? || tag.nil?
+
   {
     :found => true,
     :results => [
@@ -36,7 +39,7 @@ get '/definition?tag=&commit=' do
         :line_number => ''
       }
     ]
-  }
+  }.to_json
 end
 
 def path_to_commit_zip(repo_slug, commit_hash)
