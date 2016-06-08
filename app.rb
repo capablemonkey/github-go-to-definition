@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'digest/sha2'
 require 'open-uri'
+require 'ctags_reader'
 
 get '/' do
   "Hello!"

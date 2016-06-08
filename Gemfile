@@ -4,3 +4,4 @@ source 'https://rubygems.org/'
 
 gem 'sinatra'
 gem 'rubyzip'
+gem 'ctags_reader'
