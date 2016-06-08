@@ -16,6 +16,8 @@ post '/build_ctags' do
   commit_hash = params[:commit]
   return 400 if repo_slug.nil? || commit_hash.nil?
 
+  return 200 if tags_exist?(commit_hash)
+
   # TODO: validate repo_url with regex
   commit_path = download_commit(repo_slug, commit_hash)
   build_ctags(commit_path, commit_hash)
@@ -79,9 +81,13 @@ def commit_path(commit_hash)
 end
 
 def build_ctags(directory, commit_hash)
-  `ctags -o tags/#{commit_hash}.tags -R #{directory}`
+  `ctags -o #{tags_path(commit_hash)} -R #{directory}`
+end
+
+def tags_path(commit_hash)
+  "tags/#{commit_hash}.tags"
 end
 
 def tags_exist?(commit_hash)
-
+  File.file?(tags_path(commit_hash))
 end
