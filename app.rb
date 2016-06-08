@@ -3,34 +3,42 @@ require 'digest/sha2'
 require 'open-uri'
 require 'ctags_reader'
 
+# TODO: Just store ctags as {commit_hash}.tags.  clean up zip and files.  future API calls just require the last commit hash.
+
 get '/' do
   "Hello!"
 end
 
 post '/build_ctags' do
-  # ?repo_slug=grnhse/greenhouse_io&branch=master&commit=aa96494a1674d5288148d2356fbec84ae5e46bdc
+  # ?repo_slug=grnhse/greenhouse_io&commit=aa96494a1674d5288148d2356fbec84ae5e46bdc
 
   repo_slug = params[:repo_slug]
-  branch = params[:branch]
-  return 400 if repo_slug.nil? || branch.nil?
+  commit_hash = params[:commit]
+  return 400 if repo_slug.nil? || commit_hash.nil?
 
   # TODO: validate repo_url with regex
-  branch_path = download_branch(repo_slug, branch)
-  build_ctags(branch_path)
+  commit_path = download_commit(repo_slug, commit_hash)
+  build_ctags(commit_path, commit_hash)
+  cleanup_for_commit(commit_hash)
 
   200
 end
 
-get '/definition?tag=&file=' do
-
+get '/definition?tag=&commit=' do
+  {
+    :found => true,
+    :results => [
+      {
+        :filename => '',
+        :url => '',
+        :line_number => ''
+      }
+    ]
+  }
 end
 
-def branch_signature(repo_slug, branch)
-  Digest::SHA256.hexdigest("#{repo_slug}::#{branch}")
-end
-
-def path_to_zip(repo_slug, branch)
-  "https://codeload.github.com/#{repo_slug}/zip/#{branch}"
+def path_to_commit_zip(repo_slug, commit_hash)
+  "https://codeload.github.com/#{repo_slug}/zip/#{commit_hash}"
 end
 
 def download_file(url, destination)
@@ -45,23 +53,35 @@ def move_up_one_directory(directory)
   `mv #{directory}/*/* #{directory}/`
 end
 
-def download_branch(repo_slug, branch)
-  url = path_to_zip(repo_slug, branch)
-  signature = branch_signature(repo_slug, branch)
-  destination_zip = "./tmp/zips/#{signature}.zip"
-  download_file(url, destination_zip)
+def download_commit(repo_slug, commit_hash)
+  url = path_to_commit_zip(repo_slug, commit_hash)
+  zip = zip_path(commit_hash)
+  download_file(url, zip)
 
-  unpack_path = "./repos/#{signature}"
-  unzip_file(destination_zip, unpack_path)
+  unpack_path = commit_path(commit_hash)
+  unzip_file(zip, unpack_path)
   move_up_one_directory(unpack_path)
 
   unpack_path
 end
 
-def repo_path(repo_slug, branch)
-  "./repos/#{branch_signature(repo_slug, branch)}"
+def cleanup_for_commit(commit_hash)
+  `rm -rf #{commit_path(commit_hash)}`
+  `rm #{zip_path(commit_hash)}`
 end
 
-def build_ctags(directory)
-  `ctags -R #{directory}`
+def zip_path(commit_hash)
+  "./tmp/zips/#{commit_hash}.zip"
+end
+
+def commit_path(commit_hash)
+  "./commits/#{commit_hash}"
+end
+
+def build_ctags(directory, commit_hash)
+  `ctags -o tags/#{commit_hash}.tags -R #{directory}`
+end
+
+def tags_exist?(commit_hash)
+
 end
