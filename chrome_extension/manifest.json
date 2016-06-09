@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Github Ctags",
+  "description": "Ctags for Github pull requests",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["*://github.com/*"],
+      "css": ["assets/style.css"],
+      "js": ["js/inject.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": [
+    "activeTab"
+  ]
+}
