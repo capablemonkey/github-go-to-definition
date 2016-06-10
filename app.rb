@@ -4,10 +4,13 @@ require 'ctags_reader'
 require 'json'
 
 get '/' do
+  headers( "Access-Control-Allow-Origin" => "*" )
   "Hello!"
 end
 
 get '/definition' do
+  headers( "Access-Control-Allow-Origin" => "*" )
+
   repo_slug = params[:repo_slug]
   commit_hash = params[:commit]
   tag = params[:tag]
@@ -22,8 +25,8 @@ get '/definition' do
     :found => results.size > 0,
     :results => results.map do |result|
       {
-        :filename => result.filename, 
-        :url => 'https://github.com/foo/bar',
+        :filename => result.filename,
+        :url => "https://github.com/#{repo_slug}/blob/#{result.filename}",
         :line_number => result.line_number
       }
     end
@@ -51,7 +54,10 @@ class CTagger
 
   def lookup_tag(tag)
     reader = CtagsReader.read(tags_path)
-    reader.find_all(tag)
+    reader.find_all(tag).map do |result|
+      result.filename = clean_filename(result.filename)
+      result
+    end
   end
 
   private
@@ -93,6 +99,10 @@ class CTagger
 
     def commit_path
       "./commits/#{@commit_hash}"
+    end
+
+    def clean_filename(commit_path)
+      commit_path.gsub('./commits/', '')
     end
 
     def tags_path
