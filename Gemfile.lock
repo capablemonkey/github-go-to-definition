@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/capablemonkey/ctags_reader.git
+  revision: aca4c80e5a1486bfe986b5d1e567c956b461faaf
+  specs:
+    ctags_reader (0.0.1)
+      activesupport (>= 3.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -7,11 +14,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    ctags_reader (0.0.1)
-      activesupport (>= 3.2.0)
     i18n (0.7.0)
     json (1.8.3)
-    minitest (5.8.4)
+    minitest (5.9.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -29,7 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ctags_reader
+  ctags_reader!
   rubyzip
   sinatra
 

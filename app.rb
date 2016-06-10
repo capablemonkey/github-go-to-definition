@@ -21,15 +21,11 @@ get '/definition' do
   ctagger.generate_tags if !ctagger.tags_exist?
   results = ctagger.lookup_tag(tag)
 
+  ctagger.cleanup
+
   response = {
     :found => results.size > 0,
-    :results => results.map do |result|
-      {
-        :filename => result.filename,
-        :url => "https://github.com/#{repo_slug}/blob/#{result.filename}",
-        :line_number => result.line_number
-      }
-    end
+    :results => results
   }
 
   response.to_json
@@ -49,15 +45,25 @@ class CTagger
   def generate_tags
     download_commit
     build_ctags
-    cleanup
   end
 
   def lookup_tag(tag)
     reader = CtagsReader.read(tags_path)
     reader.find_all(tag).map do |result|
-      result.filename = clean_filename(result.filename)
-      result
+      filename = clean_filename(result.filename)
+      {
+        :filename => filename,
+        :url => "https://github.com/#{@repo_slug}/blob/#{filename}",
+        :line_number => result.line_number,
+        :line => result.ex_command
+      }
     end
+  end
+
+  def cleanup
+    # TODO: beware... check to make sure this commit path is not evil.
+    `rm -rf #{commit_path}`
+    `rm #{zip_path}`
   end
 
   private
@@ -82,11 +88,6 @@ class CTagger
       download_file(path_to_commit_zip, zip_path)
       unzip_file(zip_path, commit_path)
       move_up_one_directory(commit_path)
-    end
-
-    def cleanup
-      `rm -rf #{commit_path}`
-      `rm #{zip_path}`
     end
 
     def build_ctags
