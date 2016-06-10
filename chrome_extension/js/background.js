@@ -22,6 +22,17 @@ function getDefinitions(identifier, repo_slug, commit_hash) {
     url: "http://localhost:4567/definition?repo_slug=" + repo_slug + "&commit=" + commit_hash + "&tag=" + identifier
   })
   .done(function(response) {
-    alert(response);
+    response = JSON.parse(response);
+
+    if (response.found === false) {
+      console.log('not found');
+      return;
+    }
+
+    console.dir(response.results);
+
+    var results = response.results;
+
+    chrome.tabs.create({url: results[0].url + "#L" + results[0].line_number});
   });
 };
