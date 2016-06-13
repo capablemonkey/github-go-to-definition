@@ -1,9 +1,8 @@
 function clickHandler(info, tab) {
-  var selection = info.selectionText
+  var selection = info.selectionText;
 
-  chrome.tabs.sendMessage(tab.id, {"selection": selection}, function(response) {
-    // ask the content script what the slug is and commit hash...
-    console.log(response);
+  // ask the content script what the slug is and commit hash...
+  chrome.tabs.sendMessage(tab.id, {"sender": "github-ctags-background-page"}, function(response) {
     getDefinitions(selection, response.repo_slug, response.commit_hash);
   })
 

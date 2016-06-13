@@ -5,10 +5,10 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["*://github.com/*/pull/*/files"],
+      "matches": ["*://github.com/*"],
       "css": ["assets/style.css"],
       "js": ["js/jquery-3.0.0.min.js", "js/inject.js"],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   "background": {
