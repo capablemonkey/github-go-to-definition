@@ -72,8 +72,8 @@ function injectDefintionsModal(definitions, locationX, locationY) {
   };
 }
 
-// Add event handler for right clicking in .file containers
-function listenForRightClick() {
+function addEventHandlersForPageLoad() {
+  // Listen for right clicking in .file containers:
   $('.file').contextmenu(function(e){
     // eg. /mperham/sidekiq/blob/e4d09527c43816706587d86eef3b4036128b465e/lib/sidekiq.rb
     var file_url = $(this).find('.file-actions').children('a').attr('href');
@@ -82,7 +82,12 @@ function listenForRightClick() {
     window.gh_ctags_data.mouse.x = e.clientX;
     window.gh_ctags_data.mouse.y = $(window).scrollTop() + e.clientY;
   });
-};
+
+  // Kill any existing modal when we click elsewhere in file view:
+  $('.file').on('click', function() {
+    $('#gh-ctags-definitions-modal').remove();
+  });
+}
 
 // Extract repo slug and commit hash from file URL.
 function extractInfo(url) {
@@ -115,12 +120,12 @@ function URLChangeDetector(window, interval_ms) {
 }
 
 function setup() {
-  listenForRightClick();
+  addEventHandlersForPageLoad();
 
   // Re-add event listeners for right click when we navigate to a new page. This is because Github prevents the page from
   // truly reloading when you navigate to a new page, instead loading the new page in an AJAXy way.
   window.addEventListener('changed_page', function() {
-    listenForRightClick();
+    addEventHandlersForPageLoad();
   });
 
   var detector = new URLChangeDetector(window, 500);
