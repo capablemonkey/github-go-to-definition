@@ -5,9 +5,9 @@ function clickHandler(info, tab) {
   sendMessage(tab.id, "tag_query", {}, function(response) {
     getDefinitions(selection, response.repo_slug, response.commit_hash, function(err, definitions) {
       if (err) {
-        sendMessage(tab.id, 'error', {message: 'Could not get results'}, function(){})
+        return sendMessage(tab.id, 'error', {message: 'Could not get results'});
       }
-      sendMessage(tab.id, 'definition_response', definitions, function(){})
+      sendMessage(tab.id, 'definition_response', definitions);
     });
   });
 
