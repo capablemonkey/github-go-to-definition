@@ -1,21 +1,35 @@
 window.gh_ctags_data = {
-  'repo_slug': null,
-  'commit_hash': null
+  repo_slug: null,
+  commit_hash: null,
+  mouse: {
+    x: null,
+    y: null
+  }
 };
 
-// Listen for context menu click event from background page
+// Listen for events from background page: context menu click event, defintion results event
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.sender != "github-ctags-background-page") { return; }
-    sendResponse(window.gh_ctags_data);
+    if (request.message_type == 'tag_query') {
+      sendResponse(window.gh_ctags_data);
+    } else if (request.message_type == 'definition_response') {
+      console.log(request.found)
+      console.log(request.results)
+    } else if (request.message_type == 'error') {
+      console.error(request.message)
+    }
 });
 
 // Add event handler for right clicking in .file containers
 function listenForRightClick() {
-  $('.file').contextmenu(function(){
+  $('.file').contextmenu(function(e){
     // eg. /mperham/sidekiq/blob/e4d09527c43816706587d86eef3b4036128b465e/lib/sidekiq.rb
     var file_url = $(this).find('.file-actions').children('a').attr('href');
     window.gh_ctags_data = extractInfo(file_url);
+    window.gh_ctags_data.mouse = {};
+    window.gh_ctags_data.mouse.x = e.clientX;
+    window.gh_ctags_data.mouse.y = e.clientY;
   });
 };
 
