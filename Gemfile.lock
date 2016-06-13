@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/capablemonkey/ctags_reader.git
-  revision: aca4c80e5a1486bfe986b5d1e567c956b461faaf
+  revision: 606492204ea97b861311d61fa63ae37e2ee767c2
   specs:
     ctags_reader (0.0.1)
       activesupport (>= 3.2.0)
