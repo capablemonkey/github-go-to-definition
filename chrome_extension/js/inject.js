@@ -23,11 +23,36 @@ chrome.runtime.onMessage.addListener(
 });
 
 function injectDefintionsModal(definitions, locationX, locationY) {
-  var html = '<div class="select-menu-modal-holder" id="gh-ctags-definitions-modal"> <div class="select-menu-modal js-menu-content" aria-hidden="false"> <div class="select-menu-header"> <svg aria-label="Close" class="octicon octicon-x js-menu-close" height="16" role="img" version="1.1" viewBox="0 0 12 16" width="12"><path d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg> <span class="select-menu-title">Go to definition</span> </div><div class="select-menu-list js-navigation-container js-active-navigation-container" role="menu"> <a href="/grnhse/greenhouse_io/pull/19/commits/3bd6ac1971ab65750b16c4b0ef96068b3cbf1f25" class="select-menu-item js-navigation-item js-navigation-open" role="menuitem" tabindex="0"> <div class="select-menu-item-text"> <code class="right">3bd6ac1</code> <div class="text-emphasized css-truncate css-truncate-target"> add support for creating notes using Harvest API </div><span class="description"> jleven <relative-time datetime="2016-04-18T19:30:31Z" title="Apr 18, 2016, 3:30 PM EDT">on Apr 18</relative-time> </span> </div></a> <a href="/grnhse/greenhouse_io/pull/19/commits/ba1bec9f0f7de8867acbbf951ac36a65c7abab50" class="select-menu-item js-navigation-item js-navigation-open" role="menuitem" tabindex="0"> <div class="select-menu-item-text"> <div class="css-truncate css-truncate-target"> /lib/greenhouse_io/api/client.rb </div><code class="right">:120</code> </div></a> </div></div></div>';
-  var modal = $(html).appendTo('body');
-  modal.offset({top: locationY, left: locationX});
-  modal.css('position', 'absolute');
-  modal.show();
+  modal_holder = $('<div/>', {class: 'select-menu-modal-holder', id:'gh-ctags-definitions-modal'});
+  modal = $('<div/>', {class: 'select-menu-modal js-menu-content', 'aria-hidden': 'false'})
+
+  modal_holder.append(modal);
+
+  menu_header = $('<div/>', {class: 'select-menu-header'});
+  menu_title = $('<span/>', {class: 'select-menu-title'}).html('Go to definition');
+
+  menu_header.append(menu_title);
+
+  modal.append(menu_header);
+
+  menu_list = $('<div/>', {class: 'select-menu-list js-navigation-container js-active-navigation-container', role: 'menu'});
+
+  modal.append(menu_list);
+
+  list_item = $('<a/>', {class: 'select-menu-item js-navigation-item js-navigation-open', href: '/grnhse/greenhouse_io/blob/ba1bec9f0f7de8867acbbf951ac36a65c7abab50/lib/greenhouse_io/api/client.rb', target: 'blank', role: 'menuitem', tabindex: 0});
+
+  list_item_div = $('<div/>', {class: 'select-menu-item-text'});
+  url = $('<div/>', {class: 'css-truncate css-truncate-target'}).html('/lib/greenhouse_io/api/client.rb');
+  line_number = $('<code/>', {class: 'right'}).html(':120');
+
+  list_item_div.append(url);
+  list_item_div.append(line_number);
+  list_item.append(list_item_div);
+  menu_list.append(list_item);
+  modal_holder.appendTo('body');
+  modal_holder.offset({top: locationY, left: locationX});
+  modal_holder.css('position', 'absolute');
+  modal_holder.show();
 }
 
 // Add event handler for right clicking in .file containers
