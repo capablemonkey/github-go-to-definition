@@ -1,3 +1,5 @@
+'use strict';
+
 window.gh_ctags_data = {
   repo_slug: null,
   commit_hash: null,
@@ -16,61 +18,11 @@ chrome.runtime.onMessage.addListener(
     } else if (request.message_type == 'definition_response') {
       console.log(request.found);
       console.log(request.results);
-      injectDefintionsModal(request.results, window.gh_ctags_data.mouse.x, window.gh_ctags_data.mouse.y);
+      Modal.create(request.results, window.gh_ctags_data.mouse.x, window.gh_ctags_data.mouse.y);
     } else if (request.message_type == 'error') {
       console.error(request.message)
     }
 });
-
-function injectDefintionsModal(definitions, locationX, locationY) {
-  var modal_holder = generateModal();
-  var menu_list = modal_holder.find('.select-menu-list');
-
-  definitions.map(function(definition) {
-    return generateListItem(definition.url, definition.filename, definition.line_number);
-  }).forEach(function(list_item) {
-    menu_list.append(list_item);
-  })
-
-  // add modal to document and show it:
-  modal_holder.appendTo('body');
-  modal_holder.offset({top: locationY, left: locationX});
-  modal_holder.css('position', 'absolute');
-  modal_holder.show();
-
-  function generateListItem(url, filename, line_number){
-    var list_item = $('<a/>', {class: 'select-menu-item js-navigation-item js-navigation-open', href: url + '#L' + line_number, target: 'blank', role: 'menuitem', tabindex: 0});
-    var list_item_div = $('<div/>', {class: 'select-menu-item-text'});
-    var url = $('<div/>', {class: 'css-truncate css-truncate-target'}).html(filename.slice(40));
-    var line_number = $('<code/>', {class: 'right'}).html(':' + line_number);
-
-    list_item_div.append(url);
-    list_item_div.append(line_number);
-    list_item.append(list_item_div);
-
-    return list_item;
-  }
-
-  function generateModal() {
-    modal_holder = $('<div/>', {class: 'select-menu-modal-holder', id:'gh-ctags-definitions-modal'});
-    modal = $('<div/>', {class: 'select-menu-modal js-menu-content', 'aria-hidden': 'false'})
-
-    modal_holder.append(modal);
-
-    menu_header = $('<div/>', {class: 'select-menu-header'});
-    menu_title = $('<span/>', {class: 'select-menu-title'}).html('Go to definition');
-
-    menu_header.append(menu_title);
-
-    modal.append(menu_header);
-
-    menu_list = $('<div/>', {class: 'select-menu-list js-navigation-container js-active-navigation-container', role: 'menu'});
-
-    modal.append(menu_list);
-
-    return modal_holder;
-  };
-}
 
 function addEventHandlersForPageLoad() {
   // Listen for right clicking in .file containers:
@@ -84,9 +36,7 @@ function addEventHandlersForPageLoad() {
   });
 
   // Kill any existing modal when we click elsewhere in file view:
-  $('.file').on('click', function() {
-    $('#gh-ctags-definitions-modal').remove();
-  });
+  Modal.destroyOnClick('.file')
 }
 
 // Extract repo slug and commit hash from file URL.
