@@ -4,6 +4,10 @@ require 'ctags_reader'
 require 'json'
 require_relative 'ctagger'
 
+configure do
+  set :server, :puma
+end
+
 CTagger.create_directories
 
 get '/' do
