@@ -1,3 +1,0 @@
-runtime: ruby
-vm: true
-entrypoint: bundle exec ruby app.rb -p $PORT
