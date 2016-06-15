@@ -28,7 +28,7 @@ chrome.contextMenus.create({
 
 function getDefinitions(identifier, repo_slug, commit_hash, callback) {
   $.ajax({
-    url: "http://localhost:4567/definition?repo_slug=" + repo_slug + "&commit=" + commit_hash + "&tag=" + identifier
+    url: "http://github-ctags.gordn.org/definition?repo_slug=" + repo_slug + "&commit=" + commit_hash + "&tag=" + identifier
   })
   .done(function(response) {
     response = JSON.parse(response);
