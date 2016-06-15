@@ -25,7 +25,7 @@ get '/definition' do
   return 400 if repo_slug.nil? || commit_hash.nil? || tag.nil?
 
   ctagger = CTagger.new(repo_slug, commit_hash)
-  ctagger.generate_tags # if !ctagger.tags_exist?
+  ctagger.generate_tags if !ctagger.tags_exist?
   results = ctagger.lookup_tag(tag)
 
   ctagger.cleanup

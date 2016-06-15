@@ -70,7 +70,7 @@ class CTagger
     end
 
     def build_ctags
-      `ctags -o #{tags_path} -R #{commit_path}`
+      `ctags -o #{tags_path} -R --excmd=number #{commit_path}`
     end
 
     def zip_path
