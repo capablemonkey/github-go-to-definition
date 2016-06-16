@@ -18,9 +18,9 @@ end
 get '/definition' do
   headers( "Access-Control-Allow-Origin" => "*" )
 
-  repo_slug = params[:repo_slug]
-  commit_hash = params[:commit]
-  tag = params[:tag]
+  repo_slug = parse_param(params[:repo_slug])
+  commit_hash = parse_param(params[:commit])
+  tag = parse_param(params[:tag])
 
   return 400 if repo_slug.nil? || commit_hash.nil? || tag.nil?
 
@@ -36,4 +36,9 @@ get '/definition' do
   }
 
   response.to_json
+end
+
+def parse_param(string)
+  return nil if string == 'null'
+  string
 end
