@@ -26,18 +26,47 @@
   });
 
   function addEventHandlersForPageLoad() {
-    // Listen for right clicking in .file containers:
-    $('.file').contextmenu(function(e){
-      // eg. /mperham/sidekiq/blob/e4d09527c43816706587d86eef3b4036128b465e/lib/sidekiq.rb
-      var file_url = $(this).find('.file-actions').children('a').attr('href');
-      window.gh_ctags_data = extractInfo(file_url);
-      window.gh_ctags_data.mouse = {};
-      window.gh_ctags_data.mouse.x = e.clientX;
-      window.gh_ctags_data.mouse.y = $(window).scrollTop() + e.clientY;
-    });
+    // detect the kind of page we're on
+    // if this is a single file view, we can rely on the .repository-content url
+    var singleFileView = $('.file').length === 1;
+
+    if (singleFileView) {
+      eventHandlerForSingleFileView();
+    } else {
+      // otherwise, we might be in a pull request or commit view:
+      eventHandlerForMultipleFileView();
+    }
 
     // Kill any existing modal when we click elsewhere in file view:
-    Modal.destroyOnClick('.file')
+    Modal.destroyOnClick('.file');
+
+    function eventHandlerForMultipleFileView() {
+      $('.file').contextmenu(function(clickEvent){
+        // eg. /mperham/sidekiq/blob/e4d09527c43816706587d86eef3b4036128b465e/lib/sidekiq.rb
+        var fileURL = $(this).find('.file-actions').children('a').attr('href');
+        recordSlugAndCommit(fileURL);
+        recordMouse(clickEvent);
+      });
+    };
+
+    function eventHandlerForSingleFileView() {
+      $('.file').contextmenu(function(clickEvent){
+        // eg. /mperham/sidekiq/blob/e4d09527c43816706587d86eef3b4036128b465e/lib/sidekiq.rb
+        var fileURL = $('.repository-content > .js-permalink-shortcut').first().attr('href');
+        recordSlugAndCommit(fileURL);
+        recordMouse(clickEvent);
+      });
+    }
+  };
+
+  function recordMouse(clickEvent) {
+    window.gh_ctags_data.mouse = {};
+    window.gh_ctags_data.mouse.x = clickEvent.clientX;
+    window.gh_ctags_data.mouse.y = $(window).scrollTop() + clickEvent.clientY;
+  };
+
+  function recordSlugAndCommit(file_url) {
+    window.gh_ctags_data = extractInfo(file_url);
   }
 
   // Extract repo slug and commit hash from file URL.
