@@ -1,17 +1,17 @@
 'use strict';
 
-var URLChangeDetector = function(window, interval_ms) {
+var URLChangeDetector = function(window, intervalMS) {
   function currentURL() { return window.location.pathname; }
 
   var event = new Event('changed_page');
-  var previous_url = currentURL();
+  var previousURL = currentURL();
 
   function monitor() {
-    if (previous_url != currentURL()) {
+    if (previousURL != currentURL()) {
       window.dispatchEvent(event);
-      previous_url = currentURL();
+      previousURL = currentURL();
     }
   }
 
-  this.timer = setInterval(monitor, interval_ms);
+  this.timer = setInterval(monitor, intervalMS);
 };
