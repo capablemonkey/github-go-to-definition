@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  window.gh_ctags_data = {
+  var gh_ctags_data = {
     repo_slug: null,
     commit_hash: null,
     mouse: {
@@ -15,11 +15,11 @@
     function(request, sender, sendResponse) {
       if (request.sender != "github-ctags-background-page") { return; }
       if (request.message_type == 'tag_query') {
-        sendResponse(window.gh_ctags_data);
+        sendResponse(gh_ctags_data);
       } else if (request.message_type == 'definition_response') {
         console.log(request.found);
         console.log(request.results);
-        Modal.create(request.results, window.gh_ctags_data.mouse.x, window.gh_ctags_data.mouse.y);
+        Modal.create(request.results, gh_ctags_data.mouse.x, gh_ctags_data.mouse.y);
       } else if (request.message_type == 'error') {
         console.error(request.message)
       }
@@ -60,13 +60,13 @@
   };
 
   function recordMouse(clickEvent) {
-    window.gh_ctags_data.mouse = {};
-    window.gh_ctags_data.mouse.x = clickEvent.clientX;
-    window.gh_ctags_data.mouse.y = $(window).scrollTop() + clickEvent.clientY;
+    gh_ctags_data.mouse = {};
+    gh_ctags_data.mouse.x = clickEvent.clientX;
+    gh_ctags_data.mouse.y = $(window).scrollTop() + clickEvent.clientY;
   };
 
   function recordSlugAndCommit(file_url) {
-    window.gh_ctags_data = extractInfo(file_url);
+    gh_ctags_data = extractInfo(file_url);
   }
 
   // Extract repo slug and commit hash from file URL.
