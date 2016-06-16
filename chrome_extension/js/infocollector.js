@@ -2,8 +2,8 @@
 
 var InfoCollector = (function() {
   var info = {
-    repo_slug: null,
-    commit_hash: null,
+    repoSlug: null,
+    commitHash: null,
     mouse: {
       x: null,
       y: null
@@ -50,21 +50,21 @@ var InfoCollector = (function() {
     info.mouse.y = $(window).scrollTop() + clickEvent.clientY;
   };
 
-  function recordSlugAndCommit(file_url) {
-    info = extractInfo(file_url);
+  function recordSlugAndCommit(fileURL) {
+    info = extractInfo(fileURL);
   }
 
   // Extract repo slug and commit hash from file URL.
   function extractInfo(url) {
     url = url.substr(1); // remove leading /
-    var repo_slug = url.split('/blob/')[0];
-    var commit_hash = url.split('/blob/')[1];
+    var repoSlug = url.split('/blob/')[0];
+    var commitHash = url.split('/blob/')[1];
 
-    commit_hash = commit_hash.substr(0, 40);
+    commitHash = commitHash.substr(0, 40);
 
     return {
-      "repo_slug": repo_slug,
-      "commit_hash": commit_hash
+      "repoSlug": repoSlug,
+      "commitHash": commitHash
     };
   };
 

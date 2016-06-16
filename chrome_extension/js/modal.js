@@ -4,53 +4,53 @@ var Modal = (function(){
   var MODAL_ID = 'gh-ctags-definitions-modal';
 
   var create = function(definitions, locationX, locationY) {
-    var modal_holder = generateModal();
-    var menu_list = modal_holder.find('.select-menu-list');
+    var modalHolder = generateModal();
+    var menuList = modalHolder.find('.select-menu-list');
 
     definitions.map(function(definition) {
       return generateListItem(definition.url, definition.filename, definition.line_number);
-    }).forEach(function(list_item) {
-      menu_list.append(list_item);
+    }).forEach(function(listItem) {
+      menuList.append(listItem);
     })
 
     // add modal to document and show it:
-    modal_holder.appendTo('body');
-    modal_holder.offset({top: locationY, left: locationX});
-    modal_holder.css('position', 'absolute');
-    modal_holder.show();
+    modalHolder.appendTo('body');
+    modalHolder.offset({top: locationY, left: locationX});
+    modalHolder.css('position', 'absolute');
+    modalHolder.show();
   };
 
-  function generateListItem(url, filename, line_number){
-    var list_item = $('<a/>', {class: 'select-menu-item js-navigation-item js-navigation-open', href: url + '#L' + line_number, target: 'blank', role: 'menuitem', tabindex: 0});
-    var list_item_div = $('<div/>', {class: 'select-menu-item-text'});
+  function generateListItem(url, filename, lineNumber){
+    var listItem = $('<a/>', {class: 'select-menu-item js-navigation-item js-navigation-open', href: url + '#L' + lineNumber, target: 'blank', role: 'menuitem', tabindex: 0});
+    var listItemDiv = $('<div/>', {class: 'select-menu-item-text'});
     var url = $('<div/>', {class: 'css-truncate css-truncate-target'}).html(filename.slice(40));
-    var line_number = $('<code/>', {class: 'right'}).html(':' + line_number);
+    var lineNumber = $('<code/>', {class: 'right'}).html(':' + lineNumber);
 
-    list_item_div.append(url);
-    list_item_div.append(line_number);
-    list_item.append(list_item_div);
+    listItemDiv.append(url);
+    listItemDiv.append(lineNumber);
+    listItem.append(listItemDiv);
 
-    return list_item;
+    return listItem;
   }
 
   function generateModal() {
-    var modal_holder = $('<div/>', {class: 'select-menu-modal-holder', id: MODAL_ID});
+    var modalHolder = $('<div/>', {class: 'select-menu-modal-holder', id: MODAL_ID});
     var modal = $('<div/>', {class: 'select-menu-modal js-menu-content', 'aria-hidden': 'false'})
 
-    modal_holder.append(modal);
+    modalHolder.append(modal);
 
-    var menu_header = $('<div/>', {class: 'select-menu-header'});
-    var menu_title = $('<span/>', {class: 'select-menu-title'}).html('Go to definition');
+    var menuHeader = $('<div/>', {class: 'select-menu-header'});
+    var menuTitle = $('<span/>', {class: 'select-menu-title'}).html('Go to definition');
 
-    menu_header.append(menu_title);
+    menuHeader.append(menuTitle);
 
-    modal.append(menu_header);
+    modal.append(menuHeader);
 
-    var menu_list = $('<div/>', {class: 'select-menu-list js-navigation-container js-active-navigation-container', role: 'menu'});
+    var menuList = $('<div/>', {class: 'select-menu-list js-navigation-container js-active-navigation-container', role: 'menu'});
 
-    modal.append(menu_list);
+    modal.append(menuList);
 
-    return modal_holder;
+    return modalHolder;
   };
 
   var destroyOnClick = function(selector) {

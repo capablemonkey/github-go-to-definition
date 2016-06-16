@@ -3,7 +3,7 @@ function clickHandler(info, tab) {
 
   // ask the content script what the slug is and commit hash...
   sendMessage(tab.id, "tag_query", {}, function(response) {
-    getDefinitions(selection, response.repo_slug, response.commit_hash, function(err, definitions) {
+    getDefinitions(selection, response.repoSlug, response.commitHash, function(err, definitions) {
       if (err) {
         return sendMessage(tab.id, 'error', {message: 'Could not get results'});
       }
@@ -11,12 +11,12 @@ function clickHandler(info, tab) {
     });
   });
 
-  function sendMessage(tab_id, message_type, message, callback) {
+  function sendMessage(tabID, messageType, message, callback) {
     defaults = { sender: "github-ctags-background-page" };
-    payload = { message_type: message_type }
+    payload = { messageType: messageType }
     payload = $.extend(payload, defaults);
     payload = $.extend(payload, message);
-    chrome.tabs.sendMessage(tab_id, payload, callback);
+    chrome.tabs.sendMessage(tabID, payload, callback);
   }
 }
 
@@ -26,9 +26,9 @@ chrome.contextMenus.create({
   "onclick" : clickHandler
 });
 
-function getDefinitions(identifier, repo_slug, commit_hash, callback) {
+function getDefinitions(identifier, repoSlug, commitHash, callback) {
   $.ajax({
-    url: "http://github-ctags.gordn.org/definition?repo_slug=" + repo_slug + "&commit=" + commit_hash + "&tag=" + identifier
+    url: "http://localhost:4567/definition?repo_slug=" + repoSlug + "&commit=" + commitHash + "&tag=" + identifier
   })
   .done(function(response) {
     response = JSON.parse(response);

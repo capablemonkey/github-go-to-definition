@@ -5,13 +5,13 @@
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if (request.sender != "github-ctags-background-page") { return; }
-      if (request.message_type == 'tag_query') {
+      if (request.messageType == 'tag_query') {
         sendResponse(InfoCollector.info());
-      } else if (request.message_type == 'definition_response') {
+      } else if (request.messageType == 'definition_response') {
         console.log(request.found);
         console.log(request.results);
         Modal.create(request.results, InfoCollector.info().mouse.x, InfoCollector.info().mouse.y);
-      } else if (request.message_type == 'error') {
+      } else if (request.messageType == 'error') {
         console.error(request.message)
       }
   });
