@@ -15,6 +15,11 @@ a {
   a:hover {
     text-decoration: underline; }
 
+.header-gif {
+  width: 90%;
+  max-width: 1200px;
+}
+
 .btn {
   display: inline-block;
   margin-bottom: 1rem;
