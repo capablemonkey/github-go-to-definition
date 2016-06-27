@@ -1,10 +1,10 @@
 # github_ctags
 
+![demo video](https://cloud.githubusercontent.com/assets/1661310/16393966/eb1308ae-3c80-11e6-855a-5307593d6671.gif)
+
 This Chrome extension lets you jump to the definition of a variable, class, method or function when viewing a diff in a pull request or browsing a file on GitHub.
 
 Adds a context menu item.  Just select the token, right click on it and click 'Go to definition'!
-
-https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj
 
 [Get the extension!](https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
 
