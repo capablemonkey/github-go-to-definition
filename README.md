@@ -4,7 +4,7 @@
 
 This Chrome extension lets you jump to the definition of a variable, class, method or function when viewing a diff in a pull request or browsing a file on GitHub.
 
-Adds a context menu item.  Just select the token, right click on it and click 'Go to definition'!
+From a diff or file, just right click on the token and choose 'Go to definition'.  We'll scour the project for any definitions and let you open them in a new tab.
 
 [Get the extension!](https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
 
