@@ -8,6 +8,12 @@ Adds a context menu item.  Just select the token, right click on it and click 'G
 
 [Get the extension!](https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
 
+## How it works
+
+The chrome extension is paired with a Sinatra server which, given a github repo, a commit hash and a token to search for, downloads the repo as a zip, generates a ctags file for it and searches the index for the token.
+
+For public use, I've hosted this service on Google App Engine at https://github-ctags.gordn.org.
+
 ## Running locally
 
 This project contains a chrome extension (located in `/chrome_extension/`) and a Ruby Sinatra backend server.
@@ -19,6 +25,12 @@ To get the server running, you can either build a Docker image using the `Docker
 
 ```
 bundle install
+```
+
+You'll also need to have `ctags` installed.  Here's how to do that in Mac OS X:
+
+```
+brew install ctags
 ```
 
 2. Run server (default port is 4567)
