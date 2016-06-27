@@ -21,7 +21,7 @@ This project contains a chrome extension (located in `/chrome_extension/`) and a
 #### Server
 To get the server running, you can either build a Docker image using the `Dockerfile` or follow the following instructions.  You'll need Ruby 2+ and Bundler installed.
 
-1. Install dependencies
+Install dependencies
 
 ```
 bundle install
@@ -33,13 +33,13 @@ You'll also need to have `ctags` installed.  Here's how to do that in Mac OS X:
 brew install ctags
 ```
 
-2. Run server (default port is 4567)
+Run server (default port is 4567)
 
 ```
 bundle exec ruby app.rb -p {PORT}
 ```
 
-3. Whatever port this is running on, you'll want to update `chrome_extension/background.js` to point to `http://localhost:{PORT}/definition?...`
+Whatever port this is running on, you'll want to update `chrome_extension/background.js` to point to `http://localhost:{PORT}/definition?...`
 
 #### Chrome extension
 
