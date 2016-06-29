@@ -14,6 +14,11 @@ The Chrome extension is paired with a Sinatra server which, given a GitHub repo,
 
 For public use, I've hosted this service on Google App Engine at https://github-ctags.gordn.org.
 
+## Limitations
+
+- Doesn't work with private repositories yet, since the remote server somehow needs the authorization to download a private repo.
+- Will probably be slow for repos with 100MB+ of code (not total repo size, but actual file size)
+
 ## Running locally
 
 This project contains a chrome extension (located in `/chrome_extension/`) and a Ruby Sinatra backend server.
@@ -27,7 +32,7 @@ Install dependencies
 bundle install
 ```
 
-You'll also need to have `ctags` installed.  Here's how to do that in Mac OS X:
+You'll also need to have `ctags` and `unzip` installed.  Here's how to do that in Mac OS X:
 
 ```
 brew install ctags
