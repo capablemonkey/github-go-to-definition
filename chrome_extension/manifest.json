@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Github Ctags",
-  "description": "Ctags for Github pull requests",
+  "name": "GitHub Go To Definition",
+  "description": "Allows you to jump to the definition of methods, classes, variables, etc. while viewing a diff or file in GitHub",
   "version": "0.1.0",
   "content_scripts": [
     {

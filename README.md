@@ -1,16 +1,16 @@
-# github_ctags
+# GitHub Go To Definition
 
 ![demo video](https://cloud.githubusercontent.com/assets/1661310/16393966/eb1308ae-3c80-11e6-855a-5307593d6671.gif)
 
-This Chrome extension lets you jump to the definition of a variable, class, method or function when viewing a diff in a pull request or browsing a file on GitHub.
+This Chrome extension lets you jump to the definition of a variable, class, method or function when you're reviewing a diff in a pull request or viewing a file on GitHub.
 
-From a diff or file, just right click on the token and choose 'Go to definition'.  We'll scour the project for any definitions and let you open them in a new tab.
+Just right click on a token and choose 'Go to definition'.  We'll scour the project for any definitions and let you open them in a new tab.
 
 [Get the extension!](https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
 
 ## How it works
 
-The chrome extension is paired with a Sinatra server which, given a github repo, a commit hash and a token to search for, downloads the repo as a zip, generates a ctags file for it and searches the index for the token.
+The Chrome extension is paired with a Sinatra server which, given a GitHub repo, a commit hash and a token to search for: downloads the repo as a zip, generates a ctags file for it and searches the index for the token.
 
 For public use, I've hosted this service on Google App Engine at https://github-ctags.gordn.org.
 
@@ -39,7 +39,7 @@ Run server (default port is 4567)
 bundle exec ruby app.rb -p {PORT}
 ```
 
-Whatever port this is running on, you'll want to update `chrome_extension/background.js` to point to `http://localhost:{PORT}/definition?...`
+Whatever port this is running on, you'll want to update `/chrome_extension/background.js` to point to `http://localhost:{PORT}/definition?...`
 
 #### Chrome extension
 
