@@ -6,7 +6,7 @@ This Chrome extension lets you jump to the definition of a variable, class, meth
 
 Just right click on a token and choose 'Go to definition'.  We'll scour the project for any definitions and let you open them in a new tab.
 
-[Get the extension!](https://chrome.google.com/webstore/detail/github-ctags/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
+[Get the extension!](https://chrome.google.com/webstore/detail/github-go-to-definition/mnmfgfhdkhohgigpepkfjfeigkhfjhdj)
 
 ## How it works
 
